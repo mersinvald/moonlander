@@ -1,0 +1,9 @@
+[submodule "modules/arbitrary_keycode"]
+	path = modules/arbitrary_keycode
+	url = https://github.com/klavarog/arbitrary_keycode.git
+[submodule "modules/combo"]
+	path = modules/combo
+	url = https://github.com/klavarog/combo.git
+[submodule "modules/lang_shift"]
+	path = modules/lang_shift
+	url = https://github.com/klavarog/lang_shift.git
