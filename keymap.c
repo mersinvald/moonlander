@@ -339,9 +339,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
     // RIGHT HALF
     _______, _______, _______, _______, _______, _______, _______,
-    _______, _______, CMB_LB2, CMB_RB2, EN_ARR2, EN_ARR1, _______,
-    _______, KC_TAB,  CMB_LB1, CMB_RB1, CMB_LB4, CMB_RB4, _______,
-             _______, CMB_LB3, CMB_RB3, EN_LTEQ, EN_GTEQ, _______,
+    CT_PLUS, EN_MACR, CMB_LB2, CMB_RB2, EN_ARR2, EN_ARR1, CT_ENT,
+    CT_MINS, KC_TAB,  CMB_LB1, CMB_RB1, CMB_LB4, CMB_RB4, SH_TAB,
+             EN_FISH, CMB_LB3, CMB_RB3, EN_LTEQ, EN_GTEQ, _______,
                       _______, _______, _______, _______, _______,
                       _______, // RIGHT RED THUMB KEY
                       _______, _______, _______ // RIGHT THUMB KEYS
