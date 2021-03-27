@@ -2,7 +2,7 @@
 
 #define ZP_ZONES_NUM_MAX 8
 
-// Must be at lease 1 (for background)
+// Must be at least 1 (for background)
 #define ZP_LAYERS_NUM 3
 
 #if ZP_LAYERS_NUM < 1
