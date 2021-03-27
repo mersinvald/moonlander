@@ -4,6 +4,9 @@ RGB_MATRIX_EFFECT(ZPAINTING)
 
 #include "include.h"
 
+// TODO: make some benchmarks, find out if z-culling is needed
+// TODO: fade-in-like animation for color shift
+
 static rgba zp_effect_buffer[DRIVER_LED_TOTAL];
 
 #define ZP_MATRIX_ZONE_LIMITS(rgb_min, rgb_max, zone, min, max) \
