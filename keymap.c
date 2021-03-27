@@ -7,9 +7,12 @@
 #define CUSTOM_SAFE_RANGE ML_SAFE_RANGE
 #include "modules/lang_shift/include.h"
 #include "modules/combo/include.h"
-#include "modules/color/include.h"
 #include "modules/tt/include.h"
 // #include "repeat/include.h"
+
+/* ZPainting */
+#include "modules/zpainting/include.h"
+#include "modules/zpainting/impl.c"
 
 extern bool mcp23018_leds[3];
 
@@ -315,8 +318,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     _______, _______, _______, _______, _______, _______, _______,
     _______, _______, _______, _______, _______, _______,
     _______, _______, AU_TOG,  MU_TOG,  MU_MOD,
-    RGB_PRT, // LEFT RED THUMB KEY
-    PIC_0,   PIC_1,   PIC_2, // LEFT THUMB KEYS
+    _______, // LEFT RED THUMB KEY
+    _______,   _______,   _______, // LEFT THUMB KEYS
 
     // RIGHT HALF
     _______, _______, _______, _______, _______, RESET,   MY_FLSH,
@@ -445,88 +448,19 @@ const uint16_t tt_keys[][3] = {
 };
 const uint8_t tt_size = sizeof(tt_keys)/(sizeof(uint16_t) * 3);
 
-enum ledmap_colors {
-  COLOR_BLACK = COLOR_SAFE_RANGE, // Чёрный цвет
-  COLOR_ANYFN, // Цвет для кнопки, нажимаемой любым пальцем
-  COLOR_PINKY, // Для кнопки нажимаемой мизинцем
-  COLOR_ANNUL, // Безымянным
-  COLOR_MIDDL, // Средним
-  COLOR_INDEX, // Указательным
-  COLOR_THUMB, // Большим пальцем
+// TODO make progmem?
+static const rgba layer_bg_map[] = {
+  [L_EN] = ZP_RGB(255, 255, 255),
+  [L_EN_S] = ZP_RGB(204, 204, 204),
+
+  [L_RU] = ZP_RGB(50, 50, 255),
+  [L_RU_S] = ZP_RGB(41, 41, 204),
+
+  [L_RED] = ZP_RGB(255, 50, 50),
+  [L_YELLOW] = ZP_RGB(255, 255, 0),
+  [L_GAME] = ZP_RGB(255, 0, 255)
 };
-
-
-const uint8_t PROGMEM ledmap[][DRIVER_LED_TOTAL] = {
-    [0] = {
-      COLOR_ANYFN, COLOR_PINKY, COLOR_PINKY, COLOR_PINKY, COLOR_ANYFN,
-      COLOR_PINKY, COLOR_PINKY, COLOR_PINKY, COLOR_PINKY, COLOR_ANYFN,
-      COLOR_ANNUL, COLOR_ANNUL, COLOR_ANNUL, COLOR_ANNUL, COLOR_ANYFN,
-      COLOR_MIDDL, COLOR_MIDDL, COLOR_MIDDL, COLOR_MIDDL, COLOR_THUMB,
-      COLOR_INDEX, COLOR_INDEX, COLOR_INDEX, COLOR_INDEX, COLOR_THUMB,
-      COLOR_INDEX, COLOR_INDEX, COLOR_INDEX, COLOR_INDEX,
-      COLOR_INDEX, COLOR_INDEX, COLOR_INDEX,
-      COLOR_THUMB,
-      COLOR_THUMB, COLOR_THUMB, COLOR_THUMB,
-
-      COLOR_ANYFN, COLOR_PINKY, COLOR_PINKY, COLOR_PINKY, COLOR_ANYFN,
-      COLOR_PINKY, COLOR_PINKY, COLOR_PINKY, COLOR_PINKY, COLOR_ANYFN,
-      COLOR_ANNUL, COLOR_ANNUL, COLOR_ANNUL, COLOR_ANNUL, COLOR_ANYFN,
-      COLOR_MIDDL, COLOR_MIDDL, COLOR_MIDDL, COLOR_MIDDL, COLOR_THUMB,
-      COLOR_INDEX, COLOR_INDEX, COLOR_INDEX, COLOR_INDEX, COLOR_THUMB,
-      COLOR_INDEX, COLOR_INDEX, COLOR_INDEX, COLOR_INDEX,
-      COLOR_INDEX, COLOR_INDEX, COLOR_INDEX,
-      COLOR_THUMB,
-      COLOR_THUMB, COLOR_THUMB, COLOR_THUMB
-    },
-
-    [1] = {
-      ___________, ___________, ___________, ___________, ___________,
-      ___________, ___________, ___________, ___________, ___________,
-      ___________, ___________, ___________, ___________, ___________,
-      ___________, ___________, ___________, ___________, ___________,
-      ___________, ___________, ___________, ___________, ___________,
-      ___________, ___________, ___________, ___________,
-      ___________, ___________, ___________,
-      COLOR_LAYER,
-      COLOR_LAYER, COLOR_LAYER, COLOR_LAYER,
-
-      ___________, ___________, ___________, ___________, ___________,
-      ___________, ___________, ___________, ___________, ___________,
-      ___________, ___________, ___________, ___________, ___________,
-      ___________, ___________, ___________, ___________, ___________,
-      ___________, ___________, ___________, ___________, ___________,
-      ___________, ___________, ___________, ___________,
-      ___________, ___________, ___________,
-      COLOR_LAYER,
-      COLOR_LAYER, COLOR_LAYER, COLOR_LAYER
-    },
-};
-const uint8_t ledmap_size = sizeof(ledmap)/(sizeof(uint8_t) * DRIVER_LED_TOTAL);
-
-const uint8_t PROGMEM colormap[][3] = {
-  [COLOR_BLACK] = { 0, 0, 0 },
-  [COLOR_ANYFN] = { 0, 0, 255 },
-  [COLOR_PINKY] = { 31, 255, 255 },
-  [COLOR_ANNUL] = { 164, 255, 255 },
-  [COLOR_MIDDL] = { 76, 255, 255 },
-  [COLOR_INDEX] = { 224, 255, 255 },
-  [COLOR_THUMB] = { 8, 255, 255 },
-};
-
-const uint8_t colormap_size = sizeof(colormap)/(sizeof(uint8_t) * 3);
-
-const uint8_t PROGMEM layermap[][3] = {
-  [L_EN] = { 0, 0, 255 },
-  [L_EN_S] = { 0, 0, 192 },
-
-  [L_RU] = { 164, 255, 255 },
-  [L_RU_S] = { 164, 255, 192 },
-
-  [L_RED] = { 255, 255, 192 },
-  [L_YELLOW] = { 180, 255, 235 },
-  [L_GAME] = { 200, 255, 120 }
-};
-const uint8_t layermap_size = sizeof(layermap)/(sizeof(uint8_t) * 3);
+const uint8_t layer_bg_map_size = sizeof(layer_bg_map)/(sizeof(rgba));
 
 bool initted_for_layer_state = false;
 layer_state_t layer_state_set_user(layer_state_t state) {
@@ -541,12 +475,7 @@ layer_state_t layer_state_set_user(layer_state_t state) {
 
     uint8_t layer = get_highest_layer(state);
 
-    // Устанавливаем текущий цвет клавиатуры таким же какой сейчас цвет у слоя. Это создаёт красивый эффект для подсветок, которые используют текущий цвет.
-    rgb_matrix_sethsv_noeeprom(
-        pgm_read_byte(&layermap[layer][0]),
-        pgm_read_byte(&layermap[layer][1]),
-        pgm_read_byte(&layermap[layer][2])
-    );
+    zp_set_background(layer_bg_map[layer]);
   }
 
   return state;
@@ -593,10 +522,6 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     return false;
   }
 
-  if (!color_process_record(keycode, record)) {
-    return false;
-  }
-
   if (!process_my_hotkeys(keycode, record)) {
     return false;
   }
@@ -639,11 +564,16 @@ void matrix_scan_user(void) {
   user_timer();
 }
 
-// Нужно для color.h
 void rgb_matrix_indicators_user(void) {
-   color_rgb_matrix_indicators();
+
 }
 
 void keyboard_post_init_user(void) {
   rgb_matrix_enable();
+  audio_on();
+
+  zp_init();
+
+  zp_set_background(layer_bg_map[0]);
+  rgb_matrix_mode(RGB_MATRIX_CUSTOM_ZPAINTING);
 }

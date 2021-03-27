@@ -24,3 +24,9 @@
 
 #define KEYBOARD "moonlander"
 #define USERNAME "mersinvald"
+
+/* RGB Lighting */
+#undef RGB_MATRIX_MAXIMUM_BRIGHTNESS
+#define RGB_MATRIX_MAXIMUM_BRIGHTNESS 200
+
+#include "config_zpainting.h"
