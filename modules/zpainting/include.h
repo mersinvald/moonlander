@@ -51,6 +51,7 @@ static const size_t zp_disable_map_size = sizeof(zp_disable_map);
 
 // ZPainting draws everything on top of a zoned background
 extern rgba zp_background[ZP_ZONES_NUM];
+extern uint8_t zp_background_val;
 
 // Redraw flag should be set after any change
 extern bool zp_repaint_flag;
@@ -63,6 +64,8 @@ void zp_set_layer(uint8_t layer, const rgba* buffer);
 
 void zp_set_background_at_zone(uint8_t zone, rgba color);
 void zp_set_background(rgba color);
+void zp_background_increase_val(void);
+void zp_background_decrease_val(void);
 
 void zp_disable_layer_at_zone(uint8_t layer, uint8_t zone);
 void zp_disable_layer(uint8_t layer);

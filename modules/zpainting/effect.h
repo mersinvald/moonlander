@@ -19,6 +19,7 @@ static rgba zp_effect_buffer[DRIVER_LED_TOTAL];
 
 
 void zp_effect_draw_background(uint8_t led_min, uint8_t led_max) {
+    const float BRIGTNESS_FACTOR = (float) zp_background_val / 255.0;
     const rgba off = ZP_OFF;
 
     for(int zone = 0; zone < ZP_ZONES_NUM; zone++) {
@@ -28,6 +29,9 @@ void zp_effect_draw_background(uint8_t led_min, uint8_t led_max) {
         if(min > max) continue;
 
         rgba color = zp_background[zone];
+        color.r *= BRIGTNESS_FACTOR;
+        color.g *= BRIGTNESS_FACTOR;
+        color.b *= BRIGTNESS_FACTOR;
 
         if(zp_disable_map[ZP_LAYER_BACKGROUND][zone]) {
             color = off;
@@ -82,7 +86,7 @@ void zp_effect_init(void) {
     zp_repaint();
 }
 
-bool ZPAINTING(effect_params_t* params) {
+bool ZPAINTING(effect_params_t* params) { 
     RGB_MATRIX_USE_LIMITS(led_min, led_max);
 
     if(params->init) {
