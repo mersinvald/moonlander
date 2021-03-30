@@ -320,8 +320,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   //---------------------------------------------------------------------------
   [L_YELLOW] = MY_layout(
     // LEFT HALF
-    _______, RGB_HUI, RGB_SAI, RGB_VAI, RGB_SPI, RGB_MOD, RGB_TOG,
-    _______, RGB_HUD, RGB_SAD, RGB_VAD, RGB_SPD, RGB_RMOD,RGB_LYR,
+    _______, RGB_HUI, RGB_SAI, ZP_VAI,  RGB_SPI, RGB_MOD, RGB_TOG,
+    _______, RGB_HUD, RGB_SAD, ZP_VAD,  RGB_SPD, RGB_RMOD,RGB_LYR,
     _______, _______, _______, _______, _______, _______, _______,
     _______, _______, _______, _______, _______, _______,
     _______, _______, AU_TOG,  MU_TOG,  MU_MOD,
@@ -517,6 +517,10 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     return false;
   }
 
+  if(!zp_process_record(keycode, record)) {
+    return false;
+  }
+
 //   if (!rp_process_record(keycode, record)) {
 //     return false;
 //   }
@@ -540,6 +544,8 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
   if (!process_mouse_pixel_move(keycode, record)) {
     return false;
   }
+
+  
 
   return true;
 }

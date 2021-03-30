@@ -28,10 +28,11 @@
 
 // enable "support" app
 #define HID_APP_SUPPORT_ENABLE true
-#define HID_CONSOLE_OVERRIDE
+#define HID_APP_COLOR_ENABLE true
 
 /* RGB Lighting */
 #undef RGB_MATRIX_MAXIMUM_BRIGHTNESS
 #define RGB_MATRIX_MAXIMUM_BRIGHTNESS 200
+#define RGB_MATRIX_VAL_STEP 16
 
 #include "config_zpainting.h"
