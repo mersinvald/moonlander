@@ -9,8 +9,8 @@
 
 #pragma pack(push, 1)
 typedef struct header {
-    uint8_t sid : 4;
     uint8_t mid : 4;
+    uint8_t sid : 4;
 } hid_header_t;
 
 typedef struct message {

@@ -5,7 +5,9 @@ void hid_send(hid_message_t* msg) {
 }
 
 void hid_receive(hid_message_t* msg) {
-    uprintf("hid_receive: sid=%x, mid=%x\n", msg->header.mid, msg->header.mid);
+    #ifdef HID_DEBUG
+    uprintf("hid_receive: sid=%x, mid=%x\n", msg->header.sid, msg->header.mid);
+    #endif
 
     uint8_t sid = msg->header.sid;
     if(sid >= HID_APP_COUNT) {
