@@ -517,6 +517,10 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     return false;
   }
 
+  if(!zp_process_record(keycode, record)) {
+    return false;
+  }
+
 //   if (!rp_process_record(keycode, record)) {
 //     return false;
 //   }
@@ -540,6 +544,8 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
   if (!process_mouse_pixel_move(keycode, record)) {
     return false;
   }
+
+  
 
   return true;
 }

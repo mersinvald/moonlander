@@ -3,7 +3,7 @@
 #define ZP_ZONES_NUM_MAX 8
 
 // Must be at least 1 (for background)
-#define ZP_LAYERS_NUM 3
+#define ZP_LAYERS_NUM 4
 
 #if ZP_LAYERS_NUM < 1
   #error "ZP_LAYERS_NUM must be at least 1"
