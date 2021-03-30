@@ -1,5 +1,6 @@
 #include <string.h>
 
+#include "config.h"
 #include "include.h"
 #include "keys.h"
 
@@ -7,6 +8,7 @@ const rgba* zp_layers[ZP_DYN_LAYERS_NUM];
 bool zp_disable_map[ZP_LAYERS_NUM][ZP_ZONES_NUM];
 rgba zp_background[ZP_ZONES_NUM];
 bool zp_repaint_flag = true;
+uint8_t zp_led_hits = 0;
 
 void zp_init(void) {
     for(int i = 0; i < ZP_DYN_LAYERS_NUM; i++) {
@@ -14,6 +16,11 @@ void zp_init(void) {
     }
     memset(zp_disable_map, 0, zp_disable_map_size);
     zp_repaint();
+}
+
+void zp_repaint(void) {
+    zp_repaint_flag = true;
+    zp_led_hits = 0;
 }
 
 void zp_set_layer(uint8_t layer, const rgba* buffer) {

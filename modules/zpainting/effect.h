@@ -7,6 +7,8 @@ RGB_MATRIX_EFFECT(ZPAINTING)
 // TODO: make some benchmarks, find out if z-culling is needed
 // TODO: fade-in-like animation for color shift
 
+extern uint8_t zp_led_hits;
+
 static rgba zp_effect_buffer[DRIVER_LED_TOTAL];
 
 #define ZP_MATRIX_ZONE_LIMITS(rgb_min, rgb_max, zone, min, max) \
@@ -55,8 +57,10 @@ static inline void zp_effect_draw_pixel(uint8_t led, const rgba* layer) {
     zp_effect_buffer[led] = out;
 }
 
-void zp_effect_draw_layer(uint8_t led_min, uint8_t led_max, int lid) {
-    const rgba* layer = zp_layers[ZP_LAYER_NUM_TO_DYN_LAYER_NUM(lid)];
+void zp_effect_draw_layer(uint8_t led_min, uint8_t led_max, int dyn_lid) {
+    int lid = dyn_lid + 1;
+
+    const rgba* layer = zp_layers[dyn_lid];
     if(layer == NULL) return;
 
     for(int zone = 0; zone < ZP_ZONES_NUM; zone++) {
@@ -79,18 +83,14 @@ void zp_effect_init(void) {
 }
 
 bool ZPAINTING(effect_params_t* params) {
-    // seems like the rendering does not always go through led 0
-    static uint8_t led_hits = 0;
-
     RGB_MATRIX_USE_LIMITS(led_min, led_max);
 
     if(params->init) {
         zp_effect_init();
-        led_hits = 0;
     }
 
     if(zp_repaint_flag) {
-        led_hits += led_max - led_min;
+        zp_led_hits += led_max - led_min;
         zp_effect_draw_background(led_min, led_max);
         for(int layer = 0; layer < ZP_DYN_LAYERS_NUM; layer++) {
             zp_effect_draw_layer(led_min, led_max, layer);
@@ -104,9 +104,8 @@ bool ZPAINTING(effect_params_t* params) {
     }
 
     // Shutdown the repaint job when all LEDs been painted
-    if(led_hits >= DRIVER_LED_TOTAL) {
+    if(zp_led_hits >= DRIVER_LED_TOTAL) {
         zp_repaint_flag = false;
-        led_hits = 0;
     }
 
     return led_max < DRIVER_LED_TOTAL;

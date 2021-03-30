@@ -55,9 +55,7 @@ extern rgba zp_background[ZP_ZONES_NUM];
 // Redraw flag should be set after any change
 extern bool zp_repaint_flag;
 
-inline void zp_repaint(void) {
-    zp_repaint_flag = true;
-}
+extern void zp_repaint(void);
 
 void zp_init(void);
 
