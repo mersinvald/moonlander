@@ -8,9 +8,6 @@
 #define ORYX_CONFIGURATOR
 #define RGB_MATRIX_STARTUP_SPD 60
 
-#undef RGB_MATRIX_MAXIMUM_BRIGHTNESS
-#define RGB_MATRIX_MAXIMUM_BRIGHTNESS 150
-
 #define LANG_CHANGE_DEFAULT LANG_CHANGE_CAPS
 
 #define COMBO_KEYS_COUNT 50
@@ -24,6 +21,14 @@
 
 #define KEYBOARD "moonlander"
 #define USERNAME "mersinvald"
+#define RAW_USAGE_PAGE 0xFF60
+#define RAW_USAGE_ID 0x61
+
+/* HID Apps */
+
+// enable "support" app
+#define HID_APP_SUPPORT_ENABLE true
+#define HID_CONSOLE_OVERRIDE
 
 /* RGB Lighting */
 #undef RGB_MATRIX_MAXIMUM_BRIGHTNESS

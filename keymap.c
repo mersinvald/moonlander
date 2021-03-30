@@ -1,6 +1,8 @@
 #include QMK_KEYBOARD_H
 #include <quantum/pointing_device.h>
 #include "version.h"
+#include "raw_hid.h"
+#include <string.h>
 
 #include "modules/arbitrary_keycode/include.h"
 
@@ -13,6 +15,11 @@
 /* ZPainting */
 #include "modules/zpainting/include.h"
 #include "modules/zpainting/impl.c"
+
+/* HID apps configuration */
+#include "modules/hid_client/include.h" // include definitions required for apps
+#include "hid_apps.h"                   // register apps
+#include "modules/hid_client/impl.c"    // hid-client implementation
 
 extern bool mcp23018_leds[3];
 
@@ -562,6 +569,7 @@ void user_timer(void) {
 
 void matrix_scan_user(void) {
   user_timer();
+  hid_apps_tick();
 }
 
 void rgb_matrix_indicators_user(void) {
@@ -573,7 +581,17 @@ void keyboard_post_init_user(void) {
   audio_on();
 
   zp_init();
+  hid_apps_init();
 
   zp_set_background(layer_bg_map[0]);
   rgb_matrix_mode(RGB_MATRIX_CUSTOM_ZPAINTING);
+}
+
+void raw_hid_receive(uint8_t *data, uint8_t length) {
+  if(length != sizeof(hid_message_t)) {
+    uprintf("invalid hid packet length, expected %x, got %x\n", sizeof(hid_message_t), length);
+    return;
+  }
+
+  hid_receive((hid_message_t*) data);
 }
