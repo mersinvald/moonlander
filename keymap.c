@@ -509,6 +509,8 @@ layer_state_t layer_state_set_user(layer_state_t state) {
     uint8_t layer = get_highest_layer(state);
 
     zp_set_background(layer_bg_map[layer]);
+    
+    hid_send_record(0, NULL, layer);
   }
 
   return state;
@@ -516,8 +518,9 @@ layer_state_t layer_state_set_user(layer_state_t state) {
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
   initted_for_layer_state = true;
-
   uint8_t layer = biton32(layer_state);
+
+  hid_send_record(keycode, record, layer);
 
   // === GAMING MODE START ===
   // Handle only the separate set of the gaming-specific hotkeys

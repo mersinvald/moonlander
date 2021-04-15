@@ -26,9 +26,9 @@
 
 /* HID Apps */
 
-// enable "support" app
 #define HID_APP_SUPPORT_ENABLE true
 #define HID_APP_COLOR_ENABLE true
+#define HID_APP_METRICS_ENABLE true
 
 /* RGB Lighting */
 #undef RGB_MATRIX_MAXIMUM_BRIGHTNESS
