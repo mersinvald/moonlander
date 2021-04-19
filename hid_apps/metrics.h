@@ -21,8 +21,9 @@ enum hid_app_metrics_in {
 };
 
 enum hid_app_metrics_out {
-    KEYBOARD_EVENT = 0,
+    MATRIX_EVENT = 0,
     METRIC_EVENT = 1,
+    INPUT_EVENT = 2,
 };
 
 
@@ -44,17 +45,25 @@ void hid_app_metrics_handler(hid_message_t* msg) {
     }
 }
 
-typedef struct hid_app_metrics_keyboard_event {
+#pragma pack(push, 1)
+typedef struct hid_app_metrics_matrix_event {
     uint16_t keycode;
     uint16_t time;
     uint8_t col;
     uint8_t row;
     bool pressed;
     uint8_t layer;
-} hid_app_metrics_keyboard_event; 
+} hid_app_metrics_matrix_event; 
+
+typedef struct hid_app_metrics_input_event {
+    uint8_t keycode;
+    bool pressed;
+    uint16_t time;
+} hid_app_metrics_input_event;
+#pragma pack(pop)
 
 void hid_send_record(uint16_t keycode, keyrecord_t *record, uint8_t layer) {
-    hid_app_metrics_keyboard_event event = {0};
+    hid_app_metrics_matrix_event event = {0};
 
     if(record != NULL) {
         event.keycode = keycode;
@@ -67,11 +76,36 @@ void hid_send_record(uint16_t keycode, keyrecord_t *record, uint8_t layer) {
     event.layer = layer;
 
     hid_message_t msg = {
-        .header = { .sid = HID_APP_METRICS_SERVICE_ID, .mid = KEYBOARD_EVENT }
+        .header = { .sid = HID_APP_METRICS_SERVICE_ID, .mid = MATRIX_EVENT }
     };
 
     memset(&msg.data, 0, HID_MSG_DATA_LEN);
-    memcpy(&msg.data, &event, sizeof(hid_app_metrics_keyboard_event));
+    memcpy(&msg.data, &event, sizeof(hid_app_metrics_matrix_event));
 
     hid_send(&msg);
+}
+
+void hid_app_metrics_send_input_event(uint8_t keycode, bool pressed) {
+    hid_app_metrics_input_event event = {
+        .keycode = keycode,
+        .pressed = pressed,
+        .time = timer_read(),
+    };
+
+    hid_message_t msg = {
+        .header = { .sid = HID_APP_METRICS_SERVICE_ID, .mid = INPUT_EVENT }
+    };
+
+    memset(&msg.data, 0, HID_MSG_DATA_LEN);
+    memcpy(&msg.data, &event, sizeof(hid_app_metrics_input_event));
+
+    hid_send(&msg);
+}
+
+void hid_register_code(uint8_t keycode) {
+    hid_app_metrics_send_input_event(keycode, true);
+}
+
+void hid_unregister_code(uint8_t keycode) {
+    hid_app_metrics_send_input_event(keycode, false);
 }
