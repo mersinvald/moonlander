@@ -599,6 +599,7 @@ void repeated_key_error(void) {
 void user_timer(void) {
   combo_user_timer();
   lang_shift_user_timer();
+  hid_apps_tick();
   // rp_timer();
 }
 
