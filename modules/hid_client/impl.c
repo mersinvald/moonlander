@@ -5,7 +5,7 @@ void hid_send(hid_message_t* msg) {
 }
 
 void hid_receive(hid_message_t* msg) {
-    #ifdef HID_DEBUG
+    #ifdef HID_TRACE
     uprintf("hid_receive: sid=%x, mid=%x\n", msg->header.sid, msg->header.mid);
     #endif
 
