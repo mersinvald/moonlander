@@ -20,6 +20,10 @@
   #error "ZP_ZONES_NUM must be less then " #ZP_ZONES_NUM_MAX
 #endif
 
+#ifndef ZP_BACKGROUND_VAL
+  #define ZP_BACKGROUND_VAL 255
+#endif
+
 #define ZP_DYN_LAYERS_NUM ZP_LAYERS_NUM - 1
 #define ZP_LAYER_NUM_TO_DYN_LAYER_NUM(x) x - 1
 

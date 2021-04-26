@@ -10,7 +10,7 @@ bool zp_disable_map[ZP_LAYERS_NUM][ZP_ZONES_NUM];
 rgba zp_background[ZP_ZONES_NUM];
 bool zp_repaint_flag = true;
 uint8_t zp_led_hits = 0;
-uint8_t zp_background_val = 255;
+uint8_t zp_background_val = ZP_BACKGROUND_VAL;
 
 void zp_init(void) {
     for(int i = 0; i < ZP_DYN_LAYERS_NUM; i++) {
@@ -99,7 +99,7 @@ void zp_enable_zone(uint8_t zone) {
 
 bool zp_process_record(uint16_t key, keyrecord_t *record) {
     bool shifted = get_mods() & MOD_MASK_SHIFT;
-  
+
     switch (key) {
     case ZP_VAI:
         if (!record->event.pressed) {
@@ -112,7 +112,7 @@ bool zp_process_record(uint16_t key, keyrecord_t *record) {
         return false;
         break;
     case ZP_VAD:
-        if (!record->event.pressed) { 
+        if (!record->event.pressed) {
             if(shifted) {
                 rgb_matrix_decrease_val();
             } else {
