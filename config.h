@@ -29,8 +29,8 @@
 //#define HID_TRACE
 
 #define HID_APP_SUPPORT_ENABLE true
-#define HID_APP_COLOR_ENABLE true
-#define HID_APP_TELEMETRY_ENABLE true
+#define HID_APP_COLOR_ENABLE false
+#define HID_APP_TELEMETRY_ENABLE false
 
 /* RGB Lighting */
 #undef RGB_MATRIX_MAXIMUM_BRIGHTNESS
