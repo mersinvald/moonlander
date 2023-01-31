@@ -184,18 +184,10 @@ enum Layers {
 
   // Keyboard management layer
   L_YELLOW,
-
-  // Base gaming layout
-  L_GAME,
-
-  // Game specific layouts
-  LG_BANNERLORD,
 };
 
 #define TG_RED  TG(L_RED)
 #define TG_YELL TG(L_YELLOW)
-#define TG_GAME TG(L_GAME)
-#define TG_BNRD TG(LG_BANNERLORD)
 
 #define MO_RED  MO(L_RED)
 #define MO_YELL MO(L_YELLOW)
@@ -359,46 +351,6 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                       _______, _______, _______, _______, _______,
                       _______, // RIGHT RED THUMB KEY
                       _______, _______, _______ // RIGHT THUMB KEYS
-  ),
-  //---------------------------------------------------------------------------
-  [L_GAME] = MY_layout(
-    // LEFT HALF
-    KC_ESC,  KC_1,    KC_2,    KC_3,    KC_4,    KC_5,    KC_6,
-    KC_TAB,  KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,    KC_7,
-    KC_LSFT, KC_A,    KC_S,    KC_D,    KC_F,    KC_G,    KC_8,
-    KC_LCTL, KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,
-    XXXXXXX, XXXXXXX, XXXXXXX, KC_CAPS, KC_DEL,
-    KC_LGUI, // LEFT RED THUMB KEY
-    KC_SPC,  KC_LALT, KC_ENT, // LEFT THUMB KEYS
-
-    // RIGHT HALF
-    XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, TG_GAME,
-    TG_BNRD, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
-    XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
-             XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
-                      XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
-                      XXXXXXX, // RIGHT RED THUMB KEY
-                      XXXXXXX, XXXXXXX, XXXXXXX // RIGHT THUMB KEYxxxxx
-  ),
-
-  [LG_BANNERLORD] = MY_layout(
-    // LEFT HALF
-    BNRD_0,  BNRD_1,  BNRD_2,  BNRD_3,  BNRD_4,  BNRD_5,  BNRD_6,
-    BNRD_TAB,KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,    BNRD_7,
-    KC_LSFT, KC_A,    KC_S,    KC_D,    KC_F,    KC_G,    BNRD_8,
-    KC_LCTL, KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,
-    KC_BSPC, KC_L,    KC_RBRC, KC_CAPS, KC_DEL,
-    BNRD_SPD, // LEFT RED THUMB KEY
-    KC_SPC,  KC_LALT, KC_ENT, // LEFT THUMB KEYS
-
-    // RIGHT HALF
-    KC_T,    KC_H,    KC_V,    KC_C,    KC_X,    XXXXXXX, TG_BNRD,
-    KC_I,    KC_C,    KC_P,    KC_L,    KC_K,    KC_J,    KC_N,
-    XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
-             XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, KC_UP,   XXXXXXX,
-                      KC_B,    KC_V,    KC_LEFT, KC_DOWN, KC_RIGHT,
-                      XXXXXXX, // RIGHT RED THUMB KEY
-                      XXXXXXX, XXXXXXX, XXXXXXX // RIGHT THUMB KEYxxxxx
   )
 };
 
@@ -522,18 +474,6 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 
   hid_send_matrix_event(keycode, record, layer);
 
-  // === GAMING MODE START ===
-  // Handle only the separate set of the gaming-specific hotkeys
-  // to reduce the input lag
-  if (layer >= L_GAME) {
-    if (!process_gaming_hotkeys(keycode, record)) {
-      return false;
-    }
-
-    return true;
-  }
-  // === GAMING MODE END ===
-
   if (!process_my_music_keys(keycode, record)) {
     return false;
   }
@@ -550,9 +490,9 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     return false;
   }
 
-//   if (!rp_process_record(keycode, record)) {
-//     return false;
-//   }
+  // if (!rp_process_record(keycode, record)) {
+  //   return false;
+  // }
 
   if (!process_my_lang_keys(keycode, record)) {
     return false;
@@ -573,8 +513,6 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
   if (!process_mouse_pixel_move(keycode, record)) {
     return false;
   }
-
-
 
   return true;
 }
@@ -600,7 +538,6 @@ void user_timer(void) {
   combo_user_timer();
   lang_shift_user_timer();
   hid_apps_tick();
-  // rp_timer();
 }
 
 void matrix_scan_user(void) {
