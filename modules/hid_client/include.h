@@ -7,6 +7,8 @@
 
 #define HID_MSG_DATA_LEN RAW_EPSIZE - sizeof(hid_header_t)
 
+extern bool hid_enabled;
+
 #pragma pack(push, 1)
 typedef struct header {
     uint8_t mid : 4;

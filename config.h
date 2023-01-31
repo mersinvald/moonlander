@@ -25,10 +25,12 @@
 #define RAW_USAGE_ID 0x61
 
 /* HID Apps */
+#define HID_DEBUG
+//#define HID_TRACE
 
-// enable "support" app
 #define HID_APP_SUPPORT_ENABLE true
 #define HID_APP_COLOR_ENABLE true
+#define HID_APP_TELEMETRY_ENABLE true
 
 /* RGB Lighting */
 #undef RGB_MATRIX_MAXIMUM_BRIGHTNESS

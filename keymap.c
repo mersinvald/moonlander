@@ -187,7 +187,7 @@ enum Layers {
 
   // Base gaming layout
   L_GAME,
-  
+
   // Game specific layouts
   LG_BANNERLORD,
 };
@@ -509,6 +509,8 @@ layer_state_t layer_state_set_user(layer_state_t state) {
     uint8_t layer = get_highest_layer(state);
 
     zp_set_background(layer_bg_map[layer]);
+
+    hid_send_layer_change_event(layer);
   }
 
   return state;
@@ -516,8 +518,9 @@ layer_state_t layer_state_set_user(layer_state_t state) {
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
   initted_for_layer_state = true;
-
   uint8_t layer = biton32(layer_state);
+
+  hid_send_matrix_event(keycode, record, layer);
 
   // === GAMING MODE START ===
   // Handle only the separate set of the gaming-specific hotkeys
@@ -571,7 +574,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     return false;
   }
 
-  
+
 
   return true;
 }
@@ -596,6 +599,7 @@ void repeated_key_error(void) {
 void user_timer(void) {
   combo_user_timer();
   lang_shift_user_timer();
+  hid_apps_tick();
   // rp_timer();
 }
 

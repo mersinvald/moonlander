@@ -76,4 +76,5 @@
 #define ZP_LAYER_PICTURE 2
 #define ZP_LAYER_HOST 3
 
+#define ZP_BACKGROUND_VAL 128
 

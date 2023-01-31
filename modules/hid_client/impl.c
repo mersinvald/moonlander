@@ -1,11 +1,16 @@
 #include "include.h"
 
+bool hid_enabled = false;
+
 void hid_send(hid_message_t* msg) {
-    raw_hid_send((uint8_t*) msg, sizeof(hid_message_t));
+    // Sending hid messages without host reading them leads to keyboard hanging up
+    if(hid_enabled) {
+        raw_hid_send((uint8_t*) msg, sizeof(hid_message_t));
+    }
 }
 
 void hid_receive(hid_message_t* msg) {
-    #ifdef HID_DEBUG
+    #ifdef HID_TRACE
     uprintf("hid_receive: sid=%x, mid=%x\n", msg->header.sid, msg->header.mid);
     #endif
 
